@@ -22,6 +22,7 @@ public class App {
         manager.addTask(five);
         manager.addTask(six);
 
+        // Loop principal
         System.out.println("Bem-vindo ao ZG-Hero TODO List!");
         while (running) {
             System.out.println("\nMenu:");
@@ -33,6 +34,7 @@ public class App {
             System.out.println("6. Listar por status");
             System.out.println("7. Contar tarefas por status");
             System.out.println("8. Atualizar tarefa");
+            System.out.println("9. Ordenar tarefas");
             System.out.println("0. Sair");
             System.out.print("Escolha uma opção: ");
 
@@ -63,6 +65,9 @@ public class App {
                 case 8:
                     atualizarTarefa(manager);
                     break;
+                case 9:
+                    ordenarTarefas(manager);
+                    break;
                 case 0:
                     running = false;
                     System.out.println("Saindo...");
@@ -73,6 +78,7 @@ public class App {
         }
         sc.close();
     }
+    // Adiciona tarefa ao gerenciador
     public static void adicionarTarefa(TaskManager manager) {
         try{
             System.out.print("Nome da tarefa: ");
@@ -118,6 +124,7 @@ public class App {
         }
     }
 
+    // Remove tarefa do gerenciador pelo índice informado
     public static void removerTarefa(TaskManager manager) {
         try{        System.out.print("Índice da tarefa para remover: ");
         int idx = sc.nextInt();
@@ -132,6 +139,7 @@ public class App {
 
     }
 
+    // Lista todas as tarefas do gerenciador(sortidas por prioridade)
     public static void listarTarefas(TaskManager manager) {
         System.out.println("Todas as tarefas:");
         int i = 0;
@@ -142,6 +150,7 @@ public class App {
         continuar();
     }
 
+    // Filtra e lista tarefas por categoria
     public static void listarCategoria(TaskManager manager) {
         System.out.print("Categoria: ");
         String cat = sc.nextLine();
@@ -151,6 +160,7 @@ public class App {
         continuar();
     }
     
+    // Filtra e lista tarefas por prioridade
     public static void listarPrioridade(TaskManager manager) {
         System.out.print("Prioridade: ");
         int prio = sc.nextInt();
@@ -161,8 +171,8 @@ public class App {
         continuar();
     }
     
+    // Filtra e lista tarefas por status
     public static void listarStatus(TaskManager manager) {
-        System.out.print("Status (TODO, DOING, DONE): ");
         String status = "";
         while(!status.equals("TODO") && !status.equals("DOING") && !status.equals("DONE")) {
             System.out.print("Status (TODO, DOING, DONE): ");
@@ -174,6 +184,7 @@ public class App {
         continuar();
     }
     
+    // Conta e exibe o número de tarefas por status
     public static void contarTarefasStatus(TaskManager manager) {
         String status = "";
         while(!status.equals("TODO") && !status.equals("DOING") && !status.equals("DONE")) {
@@ -185,6 +196,7 @@ public class App {
         continuar();
     }
     
+    // Atualiza os dados de uma tarefa existente
     public static void atualizarTarefa(TaskManager manager) {
         System.out.print("Índice da tarefa para atualizar: ");
         int idx = sc.nextInt() - 1;
@@ -258,6 +270,19 @@ public class App {
         wait(2);
     }
 
+    // Ordena as tarefas por um dos parâmetros especificados
+    public static void ordenarTarefas(TaskManager manager) {
+        String criterio = "";
+        while (!criterio.equals("nome") && !criterio.equals("prioridade") && !criterio.equals("prazo") && !criterio.equals("categoria") && !criterio.equals("status")) {
+            System.out.print("Ordenar por (nome, prioridade, prazo, categoria, status): ");
+            criterio = sc.nextLine().toLowerCase();
+        }
+        manager.sortTasksBy(criterio);
+        System.out.println("Tarefas ordenadas por " + criterio);
+        wait(2);
+    }
+    
+    // Aguarda o usuário digitar 'q' para continuar
     public static void continuar() {
         System.out.println(" ");
         char c = '0';
@@ -266,6 +291,7 @@ public class App {
             c = sc.next().charAt(0);
         }
     }
+    // Aguarda por um número de segundos
     public static void wait(int sec){
         try {
             Thread.sleep(sec * 1000L);
