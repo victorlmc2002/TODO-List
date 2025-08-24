@@ -1,10 +1,12 @@
-import java.util.*;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
 
 public class TaskManager {
     private final List<Task> tasks;
 
     public TaskManager() {
-        tasks = new ArrayList<>();
+        tasks = new LinkedList<>();
     }
 
     // Ordena tarefas por um parâmetro específico
@@ -61,7 +63,7 @@ public class TaskManager {
 
     // Retorna tarefas filtradas por categoria
     public List<Task> getTasksByCategory(String category) {
-        List<Task> result = new ArrayList<>();
+        List<Task> result = new LinkedList<>();
         for (Task t : tasks) {
             if (t.getCategoria().equalsIgnoreCase(category)) {
                 result.add(t);
@@ -75,7 +77,7 @@ public class TaskManager {
 
     // Retorna tarefas filtradas por prioridade
     public List<Task> getTasksByPriority(int priority) {
-        List<Task> result = new ArrayList<>();
+        List<Task> result = new LinkedList<>();
         for (Task t : tasks) {
             if (t.getPrioridade() == priority) {
                 result.add(t);
@@ -89,7 +91,7 @@ public class TaskManager {
 
     // Retorna tarefas filtradas por status
     public List<Task> getTasksByStatus(String status) {
-        List<Task> result = new ArrayList<>();
+        List<Task> result = new LinkedList<>();
         for (Task t : tasks) {
             if (t.getStatus().equals(status)) {
                 result.add(t);
