@@ -6,7 +6,7 @@ public class TaskManager {
     public TaskManager() {
         tasks = new ArrayList<>();
     }
-
+    
     public void addTask(Task task) {
         tasks.add(task);
         tasks.sort(Comparator.comparingInt(Task::getPrioridade));
@@ -15,6 +15,16 @@ public class TaskManager {
     public void removeTask(int index) {
         if (index >= 0 && index < tasks.size()) {
             tasks.remove(index);
+        }
+    }
+
+    public void updateTask(int index, Task newTask) {
+        if (index >= 0 && index < tasks.size()) {
+            tasks.set(index, newTask);
+            tasks.sort(Comparator.comparingInt(Task::getPrioridade));
+        }
+        else {
+            System.out.println("Índice inválido para atualização de tarefa.");
         }
     }
 
