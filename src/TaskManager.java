@@ -5,7 +5,45 @@ import java.util.List;
 import java.util.Scanner;
 
 public class TaskManager {
+    // Caminho do arquivo CSV
+    private static final String CSV_PATH = "tarefas.csv";
+
     private final List<Task> tasks;
+
+    // Salva todas as tarefas no arquivo CSV
+    public void salvarTarefasCSV() {
+        try (java.io.PrintWriter pw = new java.io.PrintWriter(CSV_PATH)) {
+            for (Task t : tasks) {
+                pw.println(t.getNome() + "," + t.getDescricao() + "," + t.getPrazo() + "," + t.getPrioridade() + "," + t.getCategoria() + "," + t.getStatus());
+            }
+        } catch (Exception e) {
+            System.out.println("Erro ao salvar tarefas: " + e.getMessage());
+        }
+    }
+
+    // Carrega tarefas do arquivo CSV
+    public void carregarTarefasCSV() {
+        tasks.clear();
+        try (java.io.BufferedReader br = new java.io.BufferedReader(new java.io.FileReader(CSV_PATH))) {
+            String linha;
+            while ((linha = br.readLine()) != null) {
+                String[] campos = linha.split(",");
+                if (campos.length == 6) {
+                    String nome = campos[0];
+                    String descricao = campos[1];
+                    java.time.LocalDate prazo = java.time.LocalDate.parse(campos[2]);
+                    int prioridade = Integer.parseInt(campos[3]);
+                    String categoria = campos[4];
+                    String status = campos[5];
+                    tasks.add(new Task(nome, descricao, prazo, prioridade, categoria, status));
+                }
+            }
+        } catch (java.io.FileNotFoundException e) {
+            // Arquivo ainda não existe, não faz nada
+        } catch (Exception e) {
+            System.out.println("Erro ao carregar tarefas: " + e.getMessage());
+        }
+    }
 
     public TaskManager() {
         tasks = new LinkedList<>();
@@ -16,6 +54,7 @@ public class TaskManager {
 
     // Inicializa tarefas de exemplo e inicia o loop principal
     public void iniciarApp() {
+        carregarTarefasCSV();
         boolean running = true;
         System.out.println("Bem-vindo ao ZG-Hero TODO List!");
         while (running) {
@@ -77,10 +116,15 @@ public class TaskManager {
     public void removerTarefa() {
         try {
             System.out.print("Índice da tarefa para remover: ");
-            int idx = sc.nextInt();
+            int idx = sc.nextInt() - 1;
             sc.nextLine();
-            removeTask(idx);
-            System.out.println("Tarefa removida!");
+            if (idx >= 0 && idx < tasks.size()) {
+                removeTask(idx);
+                salvarTarefasCSV();
+                System.out.println("Tarefa removida!");
+            } else {
+                System.out.println("Índice inválido!");
+            }
             wait(2);
         } catch(Exception e) {
             System.out.println("Erro ao remover tarefa: " + e.getMessage());
@@ -260,6 +304,7 @@ public class TaskManager {
     // Adiciona uma nova tarefa e mantém a lista ordenada por prioridade
     public void addTask(Task task) {
         tasks.add(task);
+        salvarTarefasCSV();
         sortTasksBy("prioridade");
     }
 
